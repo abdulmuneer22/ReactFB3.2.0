@@ -24,6 +24,7 @@ const firebaseConfig = {
 };
 
 const window = Dimensions.get('window');
+const USERID = ""
 
 class Register extends Component {
 
@@ -41,6 +42,8 @@ this.state = {
 }
 
 }
+
+
 
 componentWillMount(){
   firebase.initializeApp(firebaseConfig)
@@ -68,19 +71,16 @@ redirect(routeName){
 
 
 
-onGoBackPress(routeName){
 
-  this.props.navigator.pop(
-    {
-      name:routeName
-    }
-  )
-
-}
 
 
 
 onRegisterPress(){
+
+let userID = this.state.name
+let userName = this.state.name
+let email = this.state.email
+
 
 firebase.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
 .catch((error)=> {
@@ -90,9 +90,32 @@ alert(error)
 
 });
 
+
+this.storeToken(userName)
+
+firebase.database().ref('users/'+userID).set({
+username : userName,
+email : email
+});
+
+
 this.redirect('login')
 
 
+
+}
+
+
+async storeToken(username){
+
+  try{
+
+    await AsyncStorage.setItem(USERID,username)
+    
+
+  }catch(error){
+    alert(error)
+  }
 
 }
 
@@ -102,13 +125,7 @@ this.redirect('login')
     return (
       <View style={styles.container}>
       
-      <TouchableHighlight 
-      
-      onPress = {this.onGoBackPress.bind(this,'register')}
-
-      >
-      <Text>Go Back ICON</Text>
-      </TouchableHighlight>
+     
 
 
       <TextInput 
@@ -149,6 +166,18 @@ this.redirect('login')
 
       >
       <Text style={styles.ButtonText}>Register</Text>
+      </TouchableHighlight>
+
+      <View>
+      <Text>Already Have An Account ?</Text>
+      <Text></Text>
+      </View>
+      <TouchableHighlight 
+      style={styles.Button}
+      onPress = {this.redirect.bind(this,'login')}
+
+      >
+      <Text style={styles.ButtonText}>Login</Text>
       </TouchableHighlight>
       
       

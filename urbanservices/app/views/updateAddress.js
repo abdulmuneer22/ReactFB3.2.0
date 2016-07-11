@@ -17,12 +17,14 @@ import {
 import Firebase from 'firebase';
 
 const window = Dimensions.get('window');
-
+const USERID = ""
+const UserName = ""
 class UpdateAddress extends Component {
 
 // Constructor
 constructor(){
 super()
+this.getToken()
 this.state = {
   name : "",
   email : "",
@@ -48,41 +50,28 @@ redirect(routeName){
 }
 
 
+async getToken(){
 
+  let username =  await AsyncStorage.getItem(USERID)
+  UserName = username
+  //alert(username)
+
+}
 
 
 
  onUpdateAddress(){
-  // Pass User Name as props so we can use it here    
-  let user_name = this.state.name      
-  let app = new Firebase("https://todoappmuneer.firebaseio.com/production/users/"+user_name)
+  
+  firebase.database().ref('users/'+UserName).update({
+  address_1 : this.state.address_1,
+  address_2 : this.state.address_2,
+  pincode : this.state.pincode,
+  mobile : this.state.mobile,
+ 
+  })
 
 
-    app.createUser({
-    'email':this.state.email,
-    'password':this.state.password,
 
-    },(error) => {
-
-                    if(error)
-                    {alert(error.code)}
-                    else{
-                      //Update this user to https://todoappmuneer.firebaseio.com/ 
-                       
-                          app.update({
-                             
-                              name: this.state.name,
-                              email : this.state.email,
-                              });
-                    //alert("Your Account Created Successfully !!")
-                   
-                    this.redirect('login')
-
-
-                    }
-                    }
-
-  );
 }
 
 
@@ -90,6 +79,8 @@ redirect(routeName){
   render() {
     return (
       <View style={styles.container}>
+     
+      <Text>Update Your Address</Text>     
       <TextInput 
       style={styles.input} 
       placeholder="Address:" 
@@ -102,6 +93,14 @@ redirect(routeName){
       placeholder="Address:" 
       onChangeText = {(text) => this.setState({address_2:text})} 
       value={this.state.address_2}
+      />
+
+      
+      <TextInput 
+      style={styles.input} 
+      placeholder="Pin Code:" 
+      onChangeText = {(text) => this.setState({pincode:text})} 
+      value={this.state.pincode}
       />
 
       <TextInput 

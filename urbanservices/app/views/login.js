@@ -57,11 +57,31 @@ redirect(routeName){
 
 onSignInPress(){
   
+  let email = this.state.email
+  let password = this.state.password
+
   // Sing In User With Firebase 3.1
+  
+  firebase.auth().signInWithEmailAndPassword(email,password)
+  .then((result)=> 
+  {
 
+  //alert(result.uid)
+  // User Authenticated Successfully , Needs to redirect him to main page
+  this.redirect('updateAddress')
 
+  }, 
+  (error)=> 
+  {
+  // Write Better exception handling 
+  alert(error)
+  }
+  );
 
- }
+        
+ 
+
+}
 
 onSkipPress(){
  

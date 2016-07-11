@@ -12,11 +12,13 @@ import {
   Image
 } from 'react-native';
 
+import firebase from 'firebase';
+import NavigationBar from './NavigationBar'
+import Dimensions from 'Dimensions'
+
 var ConditionalView = null
 var useridlength = 0
-import NavigationBar from './NavigationBar'
 
-import Dimensions from 'Dimensions'
 const window  = Dimensions.get('window')
 const windowWidth = window.width
 const UID = 'uid'
@@ -24,88 +26,44 @@ const EMAIL = 'email'
 const uidLength = '0'
 
 class MainScreen extends Component {
-    
-    navigate(routeName,token){
+constructor(){
+  super();
+  this.state = {
+    currentUser : "",
+    isLoggedIn : false
+  }
+}
 
-    this.props.navigator.push({
-    name : routeName,
-    passProps:{
-      authData : token
-    }
-    })
-
-    }
-    
-componentWillMount(props){
-
-  var _keysize = String(this.props.accessToken).length
+getUser(){
   
 
-  if(true){
-    console.log("Customer Not logged In !!")
-    ConditionalView = <View style={{
-              flex : 2,
-              //borderColor:'red',
-              //borderWidth:1
-              }} >
-
-              <View style={{
-              flex : 1,
-              //borderColor:'green',
-              //borderWidth:1
-              }}>
-              </View>
+}
 
 
+redirect(routeName){
 
-              <View style={{
-              flex : 1,
-              flexDirection: 'row',
-              //borderColor:'green',
-              //borderWidth:1,
-              marginLeft:30,
-              marginRight:30
-              }}>
-
+  this.props.navigator.push(
+    {
+      name:routeName
+      
+    }
+    )
 
 
-              <View style={{flex:1}}>
-              <TouchableHighlight 
-              style={styles.SignInButton}
-              onPress={this.navigate.bind(this,'login')}
-              >
-              <Text style={styles.SignInButtonText}>Sign In</Text>
-              </TouchableHighlight>
-              </View>
+}
+    
+componentWillMount(){
+  
+  var _currentUser = firebase.auth().currentUser;
+  
+  //console.log(_currentUser.email)
+  
+  this.setState({
+          currentUser : _currentUser
+          
+        })
+ 
 
-              <View style={{flex:1}}>
-              <TouchableHighlight 
-              style={styles.SignInButton}
-              onPress={this.navigate.bind(this,'register')}
-              >
-              <Text style={styles.SignInButtonText}>Register</Text>
-              </TouchableHighlight>
-              </View>
-
-
-              </View>
-
-              <Text 
-              style={{
-              textAlign:'center',
-              marginLeft:10,
-              marginRight:10,
-              //marginTop:20,
-              marginBottom : 20,
-              color:'#80CBC4'}}>
-              By continuing using this application, you agree to our Terms & Conditions
-              </Text>
-              </View>
-
-
-  }else{
-      ConditionalView = null
-  }
   
 }    
 
@@ -135,7 +93,7 @@ return (
 
           <TouchableHighlight 
           style={styles.homeButton}
-          onPress={this.navigate.bind(this,'watercan',this.props.authData)}
+          onPress={this.redirect.bind(this,'watercan',this.props.authData)}
           >
           <Text style={styles.homeButtonText}>Water Can</Text>
           </TouchableHighlight> 
@@ -153,13 +111,79 @@ return (
 
 
 
-          {ConditionalView}
+          {
+            !this.state.currentUser ? 
+            
+            
+            <View style={{
+              flex : 2,
+              //borderColor:'red',
+              //borderWidth:1
+              }} >
+
+              <View style={{
+              flex : 1,
+              //borderColor:'green',
+              //borderWidth:1
+              }}>
+              </View>
+
+
+
+              <View style={{
+              flex : 1,
+              flexDirection: 'row',
+              //borderColor:'green',
+              //borderWidth:1,
+              marginLeft:30,
+              marginRight:30
+              }}>
+
+
+
+              <View style={{flex:1}}>
+              <TouchableHighlight 
+              style={styles.SignInButton}
+              onPress={this.redirect.bind(this,'login')}
+              >
+              <Text style={styles.SignInButtonText}>Sign In</Text>
+              </TouchableHighlight>
+              </View>
+
+              <View style={{flex:1}}>
+              <TouchableHighlight 
+              style={styles.SignInButton}
+              onPress={this.redirect.bind(this,'register')}
+              >
+              <Text style={styles.SignInButtonText}>Register</Text>
+              </TouchableHighlight>
+              </View>
+
+
+              </View>
+
+              <Text 
+              style={{
+              textAlign:'center',
+              marginLeft:10,
+              marginRight:10,
+              //marginTop:20,
+              marginBottom : 20,
+              color:'#80CBC4'}}>
+              By continuing using this application, you agree to our Terms & Conditions
+              </Text>
+  </View>
+            
+            
+            :null}
 
 
 
           </View>
 
-
+          <View>
+            <Text>Debugger : {this.state.currentUser ? <Text>{this.state.currentUser.email}</Text> : null}</Text>
+          </View>
 
 
           </Image>

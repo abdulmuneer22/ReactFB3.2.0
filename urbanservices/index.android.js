@@ -23,11 +23,14 @@ import Root from './app/views/root'
 import MyAccount from './app/views/myAccount'
 import Categories from './app/views/categories'
 import WaterCan from './app/views/watercan'
-import MainScreen from './app/views/mainScreen'
+
 import MyCart from './app/views/myCart'
 */
 import Register from './app/views/register'
 import LogIn from './app/views/login'
+import MainScreen from './app/views/mainScreen'
+import UpdateAddress from './app/views/updateAddress'
+
 
 class urbanservices extends Component {
 constructor(){
@@ -43,7 +46,7 @@ constructor(){
 renderScene(route,navigator){
   
   if(route.name == 'mainScreen'){
-      return <MainScreen  navigator={navigator} {...route.passProps}/>
+      return <MainScreen  navigator={navigator} />
     }
 
   
@@ -86,9 +89,13 @@ if(route.name == 'myCart'){
   }
 
 
+if(route.name == 'updateAddress'){
+    return <UpdateAddress  navigator={navigator} {...route.passProps} />
+  }
+
 
 if(route.name == 'testview'){
-    return <TestView  navigator={navigator} {...route.passProps} />
+    return <UpdateAddress  navigator={navigator} {...route.passProps} />
   }
 
   
@@ -118,6 +125,10 @@ configureScene(route){
       return Navigator.SceneConfigs.FadeAndroid
 
        case 'myCart':
+      return Navigator.SceneConfigs.FadeAndroid
+
+
+       case 'updateAddress':
       return Navigator.SceneConfigs.FadeAndroid
 
 
