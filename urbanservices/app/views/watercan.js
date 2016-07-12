@@ -21,12 +21,12 @@ import {
 
 import NavigationBar from './NavigationBar'
 
-import Firebase from 'firebase';
+import firebase from 'firebase';
 
 const window = Dimensions.get('window');
 
-const FirebaseURL = "https://todoappmuneer.firebaseio.com/production/products/"
-var ref = new Firebase(FirebaseURL)
+
+
 
 
 class WaterCan extends Component {
@@ -74,33 +74,14 @@ this.redirect('myCart',sku,price,title)
 
 getProducts(){
 
- var newRef = new Firebase(FirebaseURL)
+var CanRef = firebase.database().ref('urbanservices/products/watercan')
+CanRef.once("value")
+.then((val)=>{
+  console.log(val.val())
 
- newRef.on('value',(snap)=>{
-   //console.log(snap.val())
-   var items = [] 
-   
-   snap.forEach((child)=>{
-    
-            items.push({
-              name : child.val().productTitle,
-              price :child.val().price,
-              imageurl :child.val().imageurl,
-              sku : child.val().sku
-              
-            })
+})
 
-            })
-
-  this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(items)
-      });
-  
-
-   
-
- })
-
+ 
 
 }
 

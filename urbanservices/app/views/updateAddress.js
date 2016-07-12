@@ -19,12 +19,13 @@ import Firebase from 'firebase';
 const window = Dimensions.get('window');
 const USERID = ""
 const UserName = ""
+const AddressUpdated = "false"
 class UpdateAddress extends Component {
 
 // Constructor
 constructor(){
 super()
-this.getToken()
+//this.checkIfAddressUpdated()
 this.state = {
   name : "",
   email : "",
@@ -36,6 +37,8 @@ this.state = {
 }
 
 }
+
+
 
 redirect(routeName){
 
@@ -59,17 +62,21 @@ async getToken(){
 }
 
 
-
  onUpdateAddress(){
-  
-  firebase.database().ref('users/'+UserName).update({
+  let uid = firebase.auth().currentUser.uid
+
+  firebase.database().ref('urbanservices/users/'+uid).update({
+  _name: this.state.name,
   address_1 : this.state.address_1,
   address_2 : this.state.address_2,
   pincode : this.state.pincode,
   mobile : this.state.mobile,
+  addressUpdated : "true"
  
-  })
 
+  }); 
+
+  this.redirect('mainScreen')
 
 
 }
@@ -80,17 +87,26 @@ async getToken(){
     return (
       <View style={styles.container}>
      
+      
       <Text>Update Your Address</Text>     
       <TextInput 
       style={styles.input} 
-      placeholder="Address:" 
+      placeholder="Name :" 
+      onChangeText = {(text) => this.setState({name:text})} 
+      value={this.state.name}
+      />
+
+     
+      <TextInput 
+      style={styles.input} 
+      placeholder="Address :" 
       onChangeText = {(text) => this.setState({address_1:text})} 
       value={this.state.address_1}
       />
       
       <TextInput 
       style={styles.input} 
-      placeholder="Address:" 
+      placeholder="Address :" 
       onChangeText = {(text) => this.setState({address_2:text})} 
       value={this.state.address_2}
       />

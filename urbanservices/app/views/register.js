@@ -91,12 +91,6 @@ alert(error)
 });
 
 
-this.storeToken(userName)
-
-firebase.database().ref('users/'+userID).set({
-username : userName,
-email : email
-});
 
 
 this.redirect('login')
@@ -106,18 +100,7 @@ this.redirect('login')
 }
 
 
-async storeToken(username){
 
-  try{
-
-    await AsyncStorage.setItem(USERID,username)
-    
-
-  }catch(error){
-    alert(error)
-  }
-
-}
 
 
 

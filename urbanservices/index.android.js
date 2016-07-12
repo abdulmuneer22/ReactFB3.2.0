@@ -22,7 +22,6 @@ import Root from './app/views/root'
 
 import MyAccount from './app/views/myAccount'
 import Categories from './app/views/categories'
-import WaterCan from './app/views/watercan'
 
 import MyCart from './app/views/myCart'
 */
@@ -30,6 +29,8 @@ import Register from './app/views/register'
 import LogIn from './app/views/login'
 import MainScreen from './app/views/mainScreen'
 import UpdateAddress from './app/views/updateAddress'
+import WaterCan from './app/views/watercan'
+
 
 
 class urbanservices extends Component {

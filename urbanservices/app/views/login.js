@@ -18,13 +18,14 @@ import NavigationBar from './NavigationBar'
 
 const window = Dimensions.get('window');
 const ACCESS_TOKEN = 'access_token'
-
+const AddressUpdated = ""
 
 class LogIn extends Component {
 
 // Constructor
 constructor(){
-super()
+super();
+
 this.state = {
   accessToken : "",
   email : "",
@@ -52,8 +53,7 @@ redirect(routeName){
 
 
 }
-
-
+  
 
 onSignInPress(){
   
@@ -68,7 +68,10 @@ onSignInPress(){
 
   //alert(result.uid)
   // User Authenticated Successfully , Needs to redirect him to main page
-  this.redirect('updateAddress')
+
+
+  this.checkIfAddressUpdated()
+  //this.redirect('updateAddress')
 
   }, 
   (error)=> 
@@ -82,6 +85,45 @@ onSignInPress(){
  
 
 }
+
+
+checkIfAddressUpdated(){
+  // Check if AddressUpdated so we redirect conditionally
+
+  let currentUser = firebase.auth().currentUser.uid
+  var dbRef = firebase.database().ref('urbanservices')
+  dbRef.once("value")
+  .then((val)=>{
+      var isUsersAvailable = val.hasChild('users')
+        if(isUsersAvailable){
+
+              var ref = firebase.database().ref('urbanservices/users')
+              ref.once("value")
+              .then((snapshot)=>{
+              var isRegistered = snapshot.hasChild(currentUser)
+              if(isRegistered)
+              {  
+              //alert("Yes Address Updated")
+              // Show the same address details
+              this.redirect('mainScreen')
+              
+              }else{
+                this.redirect('updateAddress')
+              }
+              })
+
+        }else{
+          
+          this.redirect('updateAddress')
+        }
+
+  })
+
+
+  
+  
+}
+
 
 onSkipPress(){
  
