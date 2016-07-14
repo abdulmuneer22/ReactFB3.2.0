@@ -23,6 +23,14 @@ import NavigationBar from './NavigationBar'
 
 import firebase from 'firebase';
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDA2O-uRbNipOS3iKo5qRAg3Xd46u67Bg0",
+  authDomain: "samplesserver.firebaseapp.com",
+  databaseURL: "https://samplesserver.firebaseio.com",
+  storageBucket: "samplesserver.appspot.com"
+};
+
+
 const window = Dimensions.get('window');
 
 
@@ -32,7 +40,8 @@ const window = Dimensions.get('window');
 class WaterCan extends Component {
 constructor(props){
   super(props);
-    this.getProducts()
+    //firebase.initializeApp(firebaseConfig);
+   // this.getProducts()
 
     this.state = {
 
@@ -63,6 +72,11 @@ redirect(routeName,productSKU,productPrice,productTitle){
 }
 
 
+componentWillMount(){
+  this.getProducts()
+}
+
+
 addToCartButtonPressd(productSKU,productPrice,productTitle){
 let title = productTitle
 let sku = productSKU
@@ -74,16 +88,35 @@ this.redirect('myCart',sku,price,title)
 
 getProducts(){
 
-var CanRef = firebase.database().ref('urbanservices/products/watercan')
-CanRef.once("value")
-.then((val)=>{
-  console.log(val.val())
+var CanRef = firebase.database().ref('urbanservices/products/watercan/')
+CanRef.on('value',(can)=>{
+  //alert(can.val())
+  var items = []
+  
+  can.forEach((child)=>{
+    items.push({
+      title : child.val().productTitle,
+      imageurl : child.val().imageurl,
+      price : child.val().price,
+      sku : child.val().sku,
+      description : child.val().description
 
+
+    })
+  })
+
+  //console.log(items)
+   this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(items)
+      });
+  
 })
+
+}
 
  
 
-}
+
 
 
   render(){
@@ -103,7 +136,7 @@ CanRef.once("value")
           
           <View style={styles.productTitleWrapper}>
           <Text style={styles.productTitle}>
-          {rowData.name}
+          {rowData.title}
           </Text>
           
           <Text style={{flex : 2}}></Text>
