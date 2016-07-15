@@ -23,6 +23,7 @@ import NavigationBar from './NavigationBar'
 
 import firebase from 'firebase';
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyDA2O-uRbNipOS3iKo5qRAg3Xd46u67Bg0",
   authDomain: "samplesserver.firebaseapp.com",
@@ -40,9 +41,8 @@ const window = Dimensions.get('window');
 class WaterCan extends Component {
 constructor(props){
   super(props);
-    //firebase.initializeApp(firebaseConfig);
-   // this.getProducts()
-
+    
+    
     this.state = {
 
       dataSource : new ListView.DataSource({

@@ -21,15 +21,10 @@ import {
 
 } from 'react-native';
 
-import Firebase from 'firebase';
+
+import firebase from 'firebase'
 
 const window = Dimensions.get('window');
-const ACCESS_TOKEN = "accessToken"
-
-const FirebaseURL = "https://todoappmuneer.firebaseio.com/production/products/"
-var ref = new Firebase(FirebaseURL)
-
-
 
 class MyCart extends Component {
 constructor(){
@@ -44,36 +39,40 @@ constructor(){
   }
 }
 
-getToken(){
-
-  
-
-}
 
 
-
-async onCheckout(){
-let _accessToken = await AsyncStorage.getItem('ACCESS_TOKEN')
-let _email = await AsyncStorage.getItem('Email')
-//alert(_accessToken+"  "+_email)
-this.setState({
-  email : _email,
-  uid : _accessToken
-})
-
-// Write these information to Fb for placing order
-
-
-//find user name with email
-var ref = new Firebase("https://todoappmuneer.firebaseio.com/production/users/")
-ref.orderByChild('email')
-.startAt('adam@adam.com')
-.once('value',(snap)=>{console.log(snap.val())})
-
+onCheckout(){
 
 
 }
 
+
+
+placeOrder(){
+  var userEmail = firebase.auth().currentUser.email;
+  var sku = this.props.sku
+  var orderID = Date.now()
+  var quantity = 1
+  var vendorID = "W001"
+  var orderDate = "10102016"
+  var UserID = firebase.auth().currentUser.uid
+
+
+  firebase.database().ref('urbanservices/Orders/'+UserID+'/'+orderID).update({
+        OrderID : orderID,
+        userEmail : userEmail,
+        SKU : sku,
+        Quantity : quantity,
+        VendorID : vendorID,
+        OrderDate : orderDate,
+        UserID : UserID
+  },()=>{
+    alert("Thank you for your order !!! Your Order ID is "+orderID+" We Will Deliver your Order In Next 60 Minutes")
+  });
+
+
+
+}
 
   render(){
     return(
@@ -103,10 +102,10 @@ ref.orderByChild('email')
         <TouchableHighlight 
                 style={[styles.Button,styles.SkipButton]}
                 onPress = 
-                {this.onCheckout.bind(this)}
+                {this.placeOrder.bind(this)}
 
                 >
-                <Text style={styles.ButtonText}> Check Out</Text>
+                <Text style={styles.ButtonText}> Place Order</Text>
                 </TouchableHighlight>
         <View>
           <Text>Debugger</Text>
